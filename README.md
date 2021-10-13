@@ -77,12 +77,6 @@ sudo kubeadm join 192.168.1.86:6443 --token adm81n.r5eiyf1njtm1mnxb \
 
 Step 5 : On master node
 #----------------------------------------------------------------------
-kmaster2@kmaster2:~$ kubectl get nodes
-NAME       STATUS     ROLES                  AGE     VERSION
-kmaster2   Ready      control-plane,master   10m     v1.22.2
-knode3     Ready      <none>                 6m50s   v1.22.2
-knode4     NotReady   <none>                 6m28s   v1.22.2
-kmaster2@kmaster2:~$
 kmaster2@kmaster2:~$ kubectl get namespaces
 NAME              STATUS   AGE
 default           Active   22m
@@ -90,6 +84,37 @@ kube-node-lease   Active   22m
 kube-public       Active   22m
 kube-system       Active   22m
 kmaster2@kmaster2:~$ 
+
+kmaster2@kmaster2:~$ kubectl get nodes
+NAME       STATUS     ROLES                  AGE     VERSION
+kmaster2   Ready      control-plane,master   10m     v1.22.2
+knode3     Ready      <none>                 6m50s   v1.22.2
+knode4     NotReady   <none>                 6m28s   v1.22.2
+kmaster2@kmaster2:~$
+
+Note:
+--------
+[+] I noticed that the knode4 was not ready, ran "journalctl -u kubelet" on knode4 and it said that having issues with CNI.
+[+] On master I ran "kubectl get cs" and found scheduler had issues. I fixed it using the below 
+    https://stackoverflow.com/questions/54608441/kubectl-connectivity-issue
+[+] Still the node was having issues. 
+[+] Decided to cleanup the knode4
+kubeadm reset
+sudo apt-get purge kubeadm kubectl kubelet kubernetes-cni kube*   
+sudo apt-get autoremove  
+sudo rm -rf ~/.kube
+sudo reboot
+[+] Performed the re-install again of kubeadm kubectl kubelet
+[+] Node came online
+
+kmaster2@kmaster2:~$ kubectl get nodes
+NAME       STATUS   ROLES                  AGE    VERSION
+kmaster2   Ready    control-plane,master   3h1m   v1.22.2
+knode3     Ready    <none>                 177m   v1.22.2
+knode4     Ready    <none>                 176m   v1.22.2
+kmaster2@kmaster2:~$
+
+
 
 Step 6 : 
 #----------------------------------------------------------------------
