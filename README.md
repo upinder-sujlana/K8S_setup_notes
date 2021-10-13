@@ -97,6 +97,15 @@ Note:
 [+] I noticed that the knode4 was not ready, ran "journalctl -u kubelet" on knode4 and it said that having issues with CNI.
 [+] On master I ran "kubectl get cs" and found scheduler had issues. I fixed it using the below 
     https://stackoverflow.com/questions/54608441/kubectl-connectivity-issue
+    After that
+    kmaster2@kmaster2:~$ kubectl get cs
+    Warning: v1 ComponentStatus is deprecated in v1.19+
+    NAME                 STATUS    MESSAGE                         ERROR
+    scheduler            Healthy   ok
+    controller-manager   Healthy   ok
+    etcd-0               Healthy   {"health":"true","reason":""}
+    kmaster2@kmaster2:~$
+
 [+] Still the node was having issues. 
 [+] Decided to cleanup the knode4
 kubeadm reset
