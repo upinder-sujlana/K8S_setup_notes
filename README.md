@@ -92,6 +92,8 @@ kube-system       Active   22m
 kmaster2@kmaster2:~$ 
 
 Step 6 : 
+#----------------------------------------------------------------------
+#Create a test jumpbox
 kmaster2@kmaster2:~$ kubectl run multitool --image=praqma/network-multitool
 pod/multitool created
 kmaster2@kmaster2:~$
