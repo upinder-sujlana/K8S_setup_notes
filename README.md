@@ -39,6 +39,8 @@ sudo vi /etc/docker/daemon.json
 
 sudo service docker restart
 
+#https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker
+
 
 # install  kubelet ,  kubeadm , kubectl
 echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
