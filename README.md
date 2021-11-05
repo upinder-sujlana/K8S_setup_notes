@@ -31,15 +31,23 @@ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubun
 sudo apt-get update ; clear
 sudo apt-get install -y docker-ce
 
-sudo vi /etc/docker/daemon.json
-##Copy paste the below into the file
-{
-		"exec-opts": ["native.cgroupdriver=systemd"]
-}
-
-sudo service docker restart
-
+#Configure docker runtime to use systemd as the cgroup driver, same as kubelet.
 #https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker
+sudo mkdir /etc/docker  (if directory not there)
+cat <<EOF | sudo tee /etc/docker/daemon.json
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+sudo systemctl enable docker
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
 
 
 # install  kubelet ,  kubeadm , kubectl
