@@ -68,12 +68,14 @@ sudo mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-## Deploy Weave for POD Network in the cluster. For other network addons check https://kubernetes.io/docs/concepts/cluster-administration/addons/
+## Deploy Weave for POD Network in the cluster. 
+## For other network addons check https://kubernetes.io/docs/concepts/cluster-administration/addons/
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 
 Step 4 : On worker nodes only
 #----------------------------------------------------------------------
-# run the join command noted from Step 2 from above. Add "sudo" in front and type password when prompted
+# Run the join command noted from Step 2 from above.
+# Add "sudo" in front and type password when prompted. e.g.
 sudo kubeadm join 192.168.1.86:6443 --token adm81n.r5eiyf1njtm1mnxb \
         --discovery-token-ca-cert-hash sha256:170d455ca057576ed93fc670d9bb6592211cffcf06244fa91970c8398a278518
 
@@ -108,13 +110,15 @@ Note:
     etcd-0               Healthy   {"health":"true","reason":""}
     kmaster2@kmaster2:~$
 
-[+] Still the node was having issues. 
-[+] Decided to cleanup the knode4
+[+] Still the knode4 was having issues. 
+[+] Decided to cleanup the knode4 (only)
 kubeadm reset
 sudo apt-get purge kubeadm kubectl kubelet kubernetes-cni kube*   
 sudo apt-get autoremove  
 sudo rm -rf ~/.kube
 sudo reboot
+[+] Did not have to cleanup docker, but if you need to cleanup docker as well use:
+    https://askubuntu.com/questions/935569/how-to-completely-uninstall-docker
 [+] Performed the re-install again of kubeadm kubectl kubelet
 [+] Node came online
 
